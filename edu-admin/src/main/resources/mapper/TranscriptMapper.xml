@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.TranscriptMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.TranscriptEntity" id="transcriptMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="studenId" column="studen_id"/>
+        <result property="examPaperId" column="exam_paper_id"/>
+        <result property="score" column="score"/>
+        <result property="examDate" column="exam_date"/>
+    </resultMap>
+
+
+</mapper>

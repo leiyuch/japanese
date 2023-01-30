@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.StudentAnswerHistoryMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.StudentAnswerHistoryEntity" id="studentAnswerHistoryMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="questionId" column="question_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="studentAnswer" jdbcType="VARCHAR" column="student_answer"
+                typeHandler="org.shanksit.japedu.common.handler.JsonStringArrayTypeHandler"/>
+        <result property="answer" jdbcType="VARCHAR" column="answer"
+                typeHandler="org.shanksit.japedu.common.handler.JsonStringArrayTypeHandler"/>
+        <result property="examinationPaperId" column="examination_paper_id"/>
+        <result property="examHistoryId" column="exam_history_id"/>
+        <result property="questionNo" column="question_no"/>
+        <result property="score" column="score"/>
+        <result property="rightOption" column="right_option"/>
+    </resultMap>
+
+    <resultMap type="org.shanksit.japedu.admin.dto.StudentAnswerHistoryDto" id="studentAnswerWrongMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="questionId" column="question_id"/>
+        <result property="studentName" column="student_name"/>
+
+    </resultMap>
+
+
+    <select id="queryWrongPages" resultMap="studentAnswerWrongMap">
+        SELECT
+        a.id,
+        a.examination_paper_id,
+        a.created_time,
+        a.question_id,
+        b.student_name
+
+        FROM t_student_answer_history a
+        LEFT JOIN t_student_base b ON a.student_id = b.id
+        WHERE 1=1
+        <if test="paperId !=null">
+            AND a.examination_paper_id = #{paperId}
+        </if>
+        <if test="studentSchool !=null">
+            AND b.student_school = #{studentSchool}
+        </if>
+        <if test="studentClass !=null">
+            AND b.student_class = #{studentClass}
+        </if>
+        <if test="studentName !=null">
+            AND b.student_name LIKE #{studentName}
+        </if>
+        AND a.right_option = 0
+
+    </select>
+    <select id="query50LimitWrongQuestion" resultType="org.shanksit.japedu.admin.dto.WrongQuestionRankDTO">
+        SELECT
+
+        question_id,
+        count(1) as wrong_number
+
+        FROM t_student_answer_history
+        WHERE 1=1
+        <if test="examHistoryIDList !=null and examHistoryIDList.size > 0">
+            AND exam_history_id IN
+            <foreach item="item" collection="examHistoryIDList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        and right_option != 1
+        GROUP BY
+        question_id
+        ORDER BY wrong_number desc,question_id asc
+        LIMIT 50
+
+    </select>
+
+    <select id="queryQuestionIdWithHistory" resultType="Long">
+        SELECT
+        DISTINCT
+        question_id
+
+        FROM t_student_answer_history
+        WHERE 1=1
+        <if test="examHistoryIDList !=null and examHistoryIDList.size > 0">
+            AND exam_history_id IN
+            <foreach item="item" collection="examHistoryIDList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+
+    </select>
+
+
+    <select id="calculateWrongNumbers" resultType="org.shanksit.japedu.admin.dto.WrongQuestionClassRankDTO">
+        SELECT
+
+        a.question_id,
+        b.student_class,
+        b.student_class_name,
+        count(1) as wrong_number
+        FROM t_student_answer_history a
+        left join t_student_base b on a.student_id = b.id
+        WHERE 1=1
+        <if test="questionIdList !=null and questionIdList.size > 0">
+            AND question_id IN
+            <foreach item="item" collection="questionIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="examHistoryIDList !=null and examHistoryIDList.size > 0">
+            AND exam_history_id IN
+            <foreach item="item" collection="examHistoryIDList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        and right_option != 1
+
+        GROUP BY
+        question_id,student_class,student_class_name
+
+    </select>
+
+    <select id="queryScoreRate" resultType="org.shanksit.japedu.admin.dto.QuestionScoreRateDTO">
+        SELECT
+
+        question_id,
+        sum( IF ( right_option = 1 , 1, 0 )) AS right_number,
+        count( 1 ) AS total_number
+        FROM t_student_answer_history
+        WHERE 1=1
+        <if test="questionIdList !=null and questionIdList.size > 0">
+            AND question_id IN
+            <foreach item="item" collection="questionIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="examHistoryIDList !=null and examHistoryIDList.size > 0">
+            AND exam_history_id IN
+            <foreach item="item" collection="examHistoryIDList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        GROUP BY
+        question_id
+
+    </select>
+</mapper>

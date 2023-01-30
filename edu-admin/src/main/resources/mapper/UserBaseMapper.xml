@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.UserBaseMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.UserBaseEntity" id="userBaseMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="email" column="email"/>
+        <result column="role_list" jdbcType="VARCHAR" property="roleList" typeHandler="org.shanksit.japedu.common.handler.JsonIntegerArrayTypeHandler" />
+        <result property="institution" column="institution"/>
+        <result property="userType" column="user_type"/>
+        <result property="isSuper" column="is_super"/>
+        <result property="relationId" column="relation_id"/>
+    </resultMap>
+
+
+</mapper>

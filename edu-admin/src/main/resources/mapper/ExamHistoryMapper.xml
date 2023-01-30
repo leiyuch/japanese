@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.ExamHistoryMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.ExamHistoryEntity" id="examHistoryMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="paperId" column="paper_id"/>
+        <result property="classId" column="class_id"/>
+        <result property="gradeName" column="grade_name"/>
+        <result property="studentId" column="student_id"/>
+        <result property="studentName" column="student_name"/>
+        <result property="paperName" column="paper_name"/>
+        <result property="reviewTime" column="review_time"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="schoolId" column="school_id"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="objectiveScore" column="objective_score"/>
+        <result property="subjectiveScore" column="subjective_score"/>
+    </resultMap>
+
+    <select id="queryHistory" resultMap="examHistoryMap">
+        SELECT
+
+        id,
+        student_id,
+        class_id,
+        school_id,
+        teacher_id,
+        student_name
+
+        FROM t_exam_history
+        WHERE 1=1
+        <if test="schoolId !=null">
+            AND school_id = #{schoolId}
+        </if>
+        <if test="classIdList !=null">
+            AND class_id IN
+            <foreach item="item" collection="classIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="teacherId !=null">
+            AND teacher_id = #{teacherId}
+        </if>
+        <if test="studentIdList !=null">
+            AND student_id IN
+            <foreach item="item" collection="studentIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="examPaperIdList !=null">
+            AND paper_id IN
+            <foreach item="item" collection="examPaperIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="studentName !=null and studentName!='' ">
+            AND student_name LIKE #{studentName}
+        </if>
+        <if test="startTime !=null and endTime !=null ">
+            AND review_time BETWEEN #{startTime} and #{endTime}
+        </if>
+
+    </select>
+
+    <select id="queryPaperIdHistory" resultType="Long">
+        SELECT
+        distinct
+        paper_id
+
+        FROM t_exam_history
+        WHERE 1=1
+        <if test="schoolId !=null">
+            AND school_id = #{schoolId}
+        </if>
+        <if test="classIdList !=null and classIdList.size > 0">
+            AND class_id IN
+            <foreach item="item" collection="classIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="teacherId !=null">
+            AND teacher_id = #{teacherId}
+        </if>
+        <if test="studentIdList !=null">
+            AND student_id IN
+            <foreach item="item" collection="studentIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="startTime !=null and endTime !=null ">
+            AND review_time BETWEEN #{startTime} and #{endTime}
+        </if>
+
+    </select>
+
+
+    <select id="queryHistoryScoreArea" resultMap="examHistoryMap">
+        SELECT
+
+        class_id,
+        total_score
+
+        FROM t_exam_history
+        WHERE 1=1
+        <if test="schoolId !=null">
+            AND school_id = #{schoolId}
+        </if>
+        <if test="classIdList !=null">
+            AND class_id IN
+            <foreach item="item" collection="classIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="teacherId !=null">
+            AND teacher_id = #{teacherId}
+        </if>
+        <if test="startTime !=null and endTime !=null ">
+            AND review_time BETWEEN #{startTime} and #{endTime}
+        </if>
+
+    </select>
+
+
+</mapper>

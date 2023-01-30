@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>org.shanksit</groupId>
+    <artifactId>japanese-edu</artifactId>
+    <version>0.0.X</version>
+    <name>japanese-edu</name>
+    <description>日语教学adm</description>
+    <modules>
+        <module>edu-common</module>
+        <module>edu-admin</module>
+    </modules>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <japedu.version>0.0.1-SNAPSHOT</japedu.version>
+        <module.dependencies>${project.build.directory}/module-dependencies</module.dependencies>
+
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+
+        <graalvm.version>20.3.0</graalvm.version>
+        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+        <metrics.version>4.1.2</metrics.version>
+        <disruptor.version>3.4.2</disruptor.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-lang3.version>3.10</commons-lang3.version>
+        <commons-beanutils.version>1.9.2</commons-beanutils.version>
+        <commons-io.version>2.4</commons-io.version>
+        <commons-net.version>3.6</commons-net.version>
+        <commons-pool2.version>2.6.0</commons-pool2.version>
+        <commons-codec.version>1.13</commons-codec.version>
+        <shiro.version>1.4.0</shiro.version>
+        <guava.version>28.1-jre</guava.version>
+        <httpclient.version>4.5.10</httpclient.version>
+        <httpasyncclient.version>4.1.4</httpasyncclient.version>
+        <quartz.version>2.3.2</quartz.version>
+        <curator.version>4.3.0</curator.version>
+        <curator-recipes.version>4.3.0</curator-recipes.version>
+
+        <mybatis.version>3.5.1</mybatis.version>
+
+        <xstream.version>1.4.11.1</xstream.version>
+        <pinyin4j.version>2.5.1</pinyin4j.version>
+        <ansj_seg.version>5.1.6</ansj_seg.version>
+
+        <lombok.version>1.18.22</lombok.version>
+        <swagger.version>2.9.2</swagger.version>
+        <hutool.version>5.6.0</hutool.version>
+
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- MYBATIS -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <!-- HUTOOL-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <!-- SWAGGER -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!-- LOMBOK -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <!-- APACHE -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>${commons-net.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+            <!--shiro -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring-boot-web-starter</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>30.0-jre</version>
+            </dependency>
+
+        </dependencies>
+
+
+
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.graalvm.compiler</groupId>
+                                    <artifactId>compiler</artifactId>
+                                    <version>${graalvm.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>compiler.jar</destFileName>
+                                    <outputDirectory>${module.dependencies}</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.graalvm.compiler</groupId>
+                                    <artifactId>compiler-management</artifactId>
+                                    <version>${graalvm.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>compiler-management.jar</destFileName>
+                                    <outputDirectory>${module.dependencies}</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.graalvm.truffle</groupId>
+                                    <artifactId>truffle-api</artifactId>
+                                    <version>${graalvm.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>truffle-api.jar</destFileName>
+                                    <outputDirectory>${module.dependencies}</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.graalvm.sdk</groupId>
+                                    <artifactId>graal-sdk</artifactId>
+                                    <version>${graalvm.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>graal-sdk.jar</destFileName>
+                                    <outputDirectory>${module.dependencies}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

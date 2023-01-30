@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.ExaminationPaperMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.ExaminationPaperEntity" id="examinationPaperMap">
+        <result property="id" column="id"/>
+        <result property="paperNo" column="paper_no"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="labelList" column="label_list"/>
+        <result property="questionJson" column="question_json" typeHandler="org.shanksit.japedu.common.handler.po.ExaminationQuestionAreaListTypeHandler"/>
+        <result property="stat" column="stat"/>
+        <result property="paperName" column="paper_name"/>
+        <result property="subPaperName" column="sub_paper_name"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="answerSheetId" column="answer_sheet_id"/>
+        <result property="storePath" column="store_path"/>
+        <result property="audioPath" column="audio_path"/>
+        <result property="sheetPath" column="sheet_path"/>
+    </resultMap>
+
+
+</mapper>

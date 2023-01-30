@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.LearningBaseMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.LearningBaseEntity" id="learningBaseMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="chapterName" column="chapter_name"/>
+        <result property="sort" column="sort"/>
+    </resultMap>
+
+
+</mapper>

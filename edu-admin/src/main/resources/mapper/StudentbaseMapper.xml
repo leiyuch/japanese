@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.StudentbaseMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.StudentbaseEntity" id="studentbaseMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="studentNo" column="student_no"/>
+        <result property="studentName" column="student_name"/>
+        <result property="studentPhone" column="student_phone"/>
+        <result property="studentEmail" column="student_email"/>
+        <result property="studentParent" column="student_parent"/>
+        <result property="studentParentPhone" column="student_parent_phone"/>
+        <result property="studentClass" column="student_class"/>
+        <result property="studentClassName" column="student_class_name"/>
+        <result property="studentSchool" column="student_school"/>
+        <result property="studentSchoolName" column="student_school_name"/>
+        <result property="admissionDate" column="admission_date"/>
+        <result property="graduationDate" column="graduation_date"/>
+        <result property="credit" column="credit"/>
+    </resultMap>
+
+
+</mapper>

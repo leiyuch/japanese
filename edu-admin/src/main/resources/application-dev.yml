@@ -1,0 +1,71 @@
+#server:
+#  port: 8888
+
+# mysql
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/japanese_education?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 0xxRoot@@123
+#    url: jdbc:mysql://119.3.141.118:3306/japanese_education?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: iWMl21anx54BM
+  mvc:
+    throw-exception-if-no-handler-found: true
+  servlet:
+    multipart:
+      max-request-size: "3000MB"
+      max-file-size: "4000MB"
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    org.shanksit.japedu: debug
+    java.sql.PreparedStatement: debug
+    io.lettuce.core.protocol: error
+  file:
+    path: logs
+    name: edu-admin
+  logback:
+    rollingpolicy:
+      max-file-size: 1GB
+
+# mybatis
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: false
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      db-type: mysql
+      field-strategy: not_empty
+      table-underline: true
+      logic-delete-value: '1' # 逻辑已删除值(默认为 Y)
+      logic-not-delete-value: '0' # 逻辑未删除值(默认为 N)
+    sql-parser-cache: true
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: org.shanksit.japedu.admin.entity
+
+
+
+org:
+  shanksit:
+    upload:
+      file-path: /Users/0xroot/Desktop/temp/jap_edu/file
+      audio-path: /Users/0xroot/Desktop/temp/jap_edu/audio
+      image-path: /Users/0xroot/Desktop/temp/jap_edu/image
+      max-size: 500 #单位M
+      file-suffix: .zip
+    store:
+      base-path: /Users/0xroot/Desktop/temp/jap_edu/doc
+      template-absolute-path: /Users/0xroot/Desktop/temp/jap_edu/template

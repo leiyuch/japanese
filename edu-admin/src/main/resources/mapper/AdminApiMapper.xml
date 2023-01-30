@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.AdminApiMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.AdminApiEntity" id="adminApiMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="apiName" column="api_name"/>
+        <result property="sort" column="sort"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="apiUrl" column="api_url"/>
+    </resultMap>
+    <select id="queryByRoleIds" resultType="java.lang.String">
+        SELECT DISTINCT
+        api_url
+        FROM
+        t_admin_api
+        WHERE
+        id IN ( SELECT api_id FROM t_admin_menu_api WHERE menu_id IN ( SELECT menu_id FROM t_admin_role_menu WHERE
+        role_id IN
+
+        <foreach item="item" collection="roleIdList" index="index" open="(" separator="," close=")">
+
+            #{item}
+
+        </foreach>
+
+        ) )
+    </select>
+
+ <select id="queryAllByRoleIds" resultType="org.shanksit.japedu.admin.entity.AdminApiEntity">
+        SELECT DISTINCT
+        api_url,api_name
+        FROM
+        t_admin_api
+        WHERE
+        id IN ( SELECT api_id FROM t_admin_menu_api WHERE menu_id IN ( SELECT menu_id FROM t_admin_role_menu WHERE
+        role_id IN
+
+        <foreach item="item" collection="roleIdList" index="index" open="(" separator="," close=")">
+
+            #{item}
+
+        </foreach>
+
+        ) )
+    </select>
+
+
+</mapper>

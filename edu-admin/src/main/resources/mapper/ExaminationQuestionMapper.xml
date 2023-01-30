@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.shanksit.japedu.admin.dao.mapper.ExaminationQuestionMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="org.shanksit.japedu.admin.entity.ExaminationQuestionEntity" id="examinationQuestionMap">
+        <result property="id" column="id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="stat" column="stat"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="questionText" column="question_text"/>
+        <result property="typeOfQuestion" column="type_of_question"/>
+        <result property="optionsA" column="options_a"/>
+        <result property="optionsB" column="options_b"/>
+        <result property="optionsC" column="options_c"/>
+        <result property="optionsD" column="options_d"/>
+        <result property="answer" jdbcType="VARCHAR" column="answer"
+                typeHandler="org.shanksit.japedu.common.handler.JsonStringArrayTypeHandler"/>
+        <result property="audioPath" column="audio_path"/>
+        <!--        <result property="audioText" column="audio_text"/>-->
+        <!--        <result property="readingText" column="reading_text"/>-->
+        <result property="parentQuestion" column="parent_question"/>
+        <!--        <result property="slaveQuestions" column="slave_questions"/>-->
+        <!--        <result property="score" column="score"/>-->
+        <result property="bankId" column="bank_id"/>
+        <result property="labelList" jdbcType="VARCHAR" column="label_list"
+                typeHandler="org.shanksit.japedu.common.handler.JsonStringArrayTypeHandler"/>
+        <result property="hashKey" column="hash_key"/>
+        <result property="labelIdList" jdbcType="VARCHAR" column="label_id_list"
+                typeHandler="org.shanksit.japedu.common.handler.JsonLongArrayTypeHandler"/>
+        <result property="imageStorePaths" jdbcType="VARCHAR" column="image_store_paths"
+                typeHandler="org.shanksit.japedu.common.handler.JsonStringArrayTypeHandler"/>
+        <result property="uploadSerialNo" column="upload_serial_no"/>
+    </resultMap>
+
+    <select id="getListByBankIdAndLabelIdList" resultType="org.shanksit.japedu.admin.entity.ExaminationQuestionEntity">
+        SELECT
+        DISTINCTROW
+        b.*
+        FROM
+        t_examination_question b
+        LEFT JOIN `t_question_label` a ON a.question_id = b.id
+
+        WHERE
+        1=1
+        <if test="labelIdList != null and labelIdList.size() > 0 ">
+            AND a.label_id IN
+            <foreach item="item" collection="labelIdList" index="index" open="(" separator="," close=")">
+
+                #{item}
+
+            </foreach>
+        </if>
+
+
+        <if test="typeId != null">
+            AND b.type_of_question = #{typeId}
+
+        </if>
+
+
+        <if test="bankId != null">
+            AND b.bank_id = #{bankId}
+
+        </if>
+        AND b.parent_question = 0
+
+        ORDER BY RAND()
+        LIMIT #{num}
+
+    </select>
+
+
+    <select id="getListNeedToAddWithTwoDivided" resultType="org.shanksit.japedu.admin.entity.ExaminationQuestionEntity">
+        SELECT
+        DISTINCT
+        b.parent_question
+        FROM
+        t_examination_question b
+        <choose>
+            <when test="labelIdList != null and labelIdList.size() > 0 ">
+                LEFT JOIN (select question_id from t_question_label where label_id IN
+                <foreach item="item" collection="labelIdList" index="index" open="(" separator="," close=")">
+
+                    #{item}
+
+                </foreach>) a ON a.question_id = b.id
+
+            </when>
+            <otherwise>
+                LEFT JOIN `t_question_label` a ON a.question_id = b.id
+            </otherwise>
+        </choose>
+
+
+        WHERE
+        1=1
+
+        <if test="typeId != null">
+            AND b.type_of_question = #{typeId}
+
+        </if>
+
+        <if test="bankId != null">
+            AND b.bank_id = #{bankId}
+
+        </if>
+
+        <if test="questionIdList != null and questionIdList.size() > 0 ">
+            AND b.parent_question NOT IN
+            <foreach item="item" collection="questionIdList" index="index" open="(" separator="," close=")">
+
+                #{item}
+
+            </foreach>
+
+        </if>
+
+        GROUP BY parent_question HAVING count( 1 ) = #{countNumber}
+
+        ORDER BY RAND()
+        LIMIT #{num}
+
+    </select>
+
+
+    <select id="getListNeedToAddWithParentQuestionId"
+            resultType="org.shanksit.japedu.admin.entity.ExaminationQuestionEntity">
+        SELECT
+        DISTINCT
+        parent_question
+        FROM
+        t_examination_question
+        WHERE
+        parent_question IN
+        <foreach item="item" collection="questionIdList" index="index" open="(" separator="," close=")">
+
+            #{item}
+
+        </foreach>
+
+        GROUP BY parent_question HAVING count( 1 ) = #{countNumber}
+        ORDER BY RAND()
+        <if test="num != null and num > 0">
+            LIMIT #{num}
+        </if>
+    </select>
+
+    <select id="getListNeedToAddWithQuestionId" resultType="org.shanksit.japedu.admin.entity.ExaminationQuestionEntity">
+        SELECT
+        *
+        FROM
+        t_examination_question
+        WHERE
+        id IN
+        <foreach item="item" collection="questionIdList" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="typeId != null">
+            and `type_of_question` = #{typeId}
+        </if>
+        ORDER BY RAND()
+
+        <if test="num != null and num > 0">
+            LIMIT #{num}
+        </if>
+
+    </select>
+
+
+    <select id="listParentIdBySub" resultType="Long">
+        SELECT
+        DISTINCT
+        parent_question
+        FROM
+        t_examination_question
+        where
+        1=1
+        <if test="questionIdList != null and questionIdList.size() > 0 ">
+            AND  id IN
+            <foreach item="item" collection="questionIdList" index="index" open="(" separator="," close=")">
+
+                #{item}
+
+            </foreach>
+
+        </if>
+        <if test="typeId != null">
+            AND type_of_question = #{typeId}
+
+        </if>
+
+    </select>
+
+    <select id="selectPageQuery" resultMap="examinationQuestionMap">
+        SELECT
+        DISTINCTROW
+        b.*
+        FROM
+        t_examination_question b
+        LEFT JOIN `t_question_label` a ON a.question_id = b.id
+
+        WHERE
+        1=1
+        <if test="query.labelIdList != null and query.labelIdList.length > 0 ">
+            AND a.label_id IN
+            <foreach item="item" collection="query.labelIdList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="query.typeOfQuestion != null">
+            AND b.type_of_question = #{query.typeOfQuestion}
+        </if>
+        <if test="query.bankId != null">
+            AND b.bank_id = #{query.bankId}
+        </if>
+        <if test="query.questionText !=null and query.questionText !=''">
+            AND b.question_text like concat('%',#{query.questionText},'%')
+        </if>
+
+    </select>
+
+</mapper>
